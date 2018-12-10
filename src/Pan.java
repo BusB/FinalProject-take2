@@ -1,0 +1,24 @@
+import java.awt.geom.Arc2D;
+import java.awt.*;
+import java.util.ArrayList;
+
+public class Pan extends Arc2D.Double {
+
+    private Color color;
+    ArrayList<Shape> shapes = new ArrayList<>();
+    double totalArea = 0;
+
+
+    public Pan(Color c, double x, double y, double w, double h, double start, double extent, int type){
+        super(x, y, w, h, start, extent, type);
+        this.color = c;
+    }
+
+    public void changeY(int changeBy) { y += changeBy;
+    }
+
+    public Color getColor(){
+        return color;
+    }
+
+}
