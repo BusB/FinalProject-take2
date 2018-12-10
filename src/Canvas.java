@@ -42,7 +42,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
     }
 
     public void drawPan(Pan p) {
-        drawArc(p.getColor(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
+        drawArc(p.getGradient(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
     }
 
 
@@ -99,7 +99,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
         } else if (keyTyped == 'd') {
             panRight.shapes.add(box);
             panRight.totalArea = box.getArea();
-            box.setyPosition((int) panRight.y - 30);
+            box.setyPosition((int) panRight.y - 35);
             box.setxPosition((int) panRight.x + 5);
         } else if (keyPressed == 'w') {
             box.changeYPos(-5);
@@ -135,8 +135,8 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     private int canvasWidth = 800;
     private int canvasHeight = 600;
-    char keyPressed;
-    char keyTyped;
+    private char keyPressed;
+    private char keyTyped;
 
     public void drawBackground() {
         gc2.setColor(backgroundColor);
@@ -149,9 +149,12 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.fillRect(xPosition, yPosition, width, width);
     }
 
-    public void drawArc(Color color, int x, int y, int w, int h, int start, int extent) {
-        gc2.setColor(color);
+    public void drawArc(GradientPaint platecolor, int x, int y, int w, int h, int start, int extent) {
+        //gc2.setColor(color);
+        platecolor = new GradientPaint(210,y,Color.ORANGE,210,y+30,Color.darkGray);
+        gc2.setPaint(platecolor);
         gc2.fillArc(x, y, w, h, start, extent);
+
     }
 
     public void drawString(Color color, String str, int fontSize, int xPosition, int yPosition) {

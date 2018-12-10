@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Pan extends Arc2D.Double {
 
     private Color color;
+    private GradientPaint gradient;
     ArrayList<Shape> shapes = new ArrayList<>();
     double totalArea = 0;
 
@@ -20,5 +21,11 @@ public class Pan extends Arc2D.Double {
     public Color getColor(){
         return color;
     }
+
+    public GradientPaint getGradient(){
+        return gradient;
+    }
+
+
 
 }
