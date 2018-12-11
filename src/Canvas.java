@@ -19,6 +19,10 @@ public class Canvas extends Window implements KeyListener, Runnable {
     private Pan panLeft = new Pan(Color.ORANGE, 60, 300, 300, 30, 0, -180, 1);
     private Pan panRight = new Pan(Color.ORANGE, 440, 300, 300, 30, 0, -180, 1);
 
+    private GameShape gameEllipse = new GameShape("ellipse");
+    private GameShape gameTriangle = new GameShape("triangle");
+    private GameShape gameStar = new GameShape("star");
+    private GameShape gameRectangle = new GameShape(gameEllipse,gameTriangle,gameStar);
 
     // Don't delete this constructor!
     public Canvas() {
