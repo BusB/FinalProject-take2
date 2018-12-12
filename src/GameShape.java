@@ -5,6 +5,9 @@ public class GameShape{
     private static final double TRIANGLE_AREA = 0.5;
     private static final double RECTANGLE_AREA = 1.0;
     private static final double STAR_AREA = 0.32632;
+    private static final int STARTING_ROW = 0;
+    private static final int LEFT_PAN = 1;
+    private static final int RIGHT_PAN = 2;
 
     private double gsArea;
     private double xScale;
@@ -23,7 +26,7 @@ public class GameShape{
         isSelected = false;
         yPosition = 500;
         xPosition = 225;
-        location = 0;
+        location = STARTING_ROW;
 
         if(shapeType==1){
             this.gsArea = ELLIPSE_AREA * xs * ys;
@@ -54,7 +57,7 @@ public class GameShape{
         isSelected = false;
         yPosition = 500;
         xPosition = 225;
-        location = 0;
+        location = STARTING_ROW;
 
         if(shapeName.equalsIgnoreCase("ellipse")){
             this.gsArea = ELLIPSE_AREA * xScale * yScale;
@@ -78,12 +81,14 @@ public class GameShape{
         }
     }
 
+    //creates a rectangle that makes sure shapes can balance
     public GameShape(GameShape ellipse, GameShape triangle, GameShape star){
-        //creates rectangle that makes sure shapes can balance
         int randomShape = (int) (Math.random()*3);
         double scale = 0.2 + 0.8*Math.random();
 
+        //try to balance the ellipse
         if(randomShape==0){
+            //if the ellipse is small, put the rectangle on the ellipse side
             if(ellipse.getGsArea()<triangle.getGsArea()+star.getGsArea()-4){
                 double area = (triangle.getGsArea()+star.getGsArea()-ellipse.getGsArea())/100.;
                 while (area/scale < 0.2 || area/scale > 1.0){
@@ -91,6 +96,7 @@ public class GameShape{
                 }
                 xScale = scale;
                 yScale = area/scale;
+            //if the ellipse is big, put the rectangle on the other side
             } else if(ellipse.getGsArea()>triangle.getGsArea()+star.getGsArea()+4){
                 double area = (ellipse.getGsArea()-triangle.getGsArea()-star.getGsArea())/100.;
                 while (area/scale < 0.2 || area/scale > 1.0){
@@ -98,10 +104,12 @@ public class GameShape{
                 }
                 xScale = scale;
                 yScale = area/scale;
+            //if it's too well balanced, try the next shape
             }else{
                 randomShape = 1;
             }
         }
+        //try to balance the triangle
         if(randomShape==1){
             if(triangle.getGsArea()<ellipse.getGsArea()+star.getGsArea()-4.){
                 double area = (ellipse.getGsArea()+star.getGsArea()-triangle.getGsArea())/100.;
@@ -121,6 +129,7 @@ public class GameShape{
                 randomShape = 2;
             }
         }
+        //try to balance the star
         if(randomShape==2){
             if(star.getGsArea()<ellipse.getGsArea()+triangle.getGsArea()-4.){
                 double area = (ellipse.getGsArea()+triangle.getGsArea()-star.getGsArea())/100.;
@@ -140,7 +149,9 @@ public class GameShape{
                 randomShape = 3;
             }
         }
+        //nothing else worked, so try to balance the rectangle.
         if(randomShape==3){
+            //if the other shapes are small, generate a rectangle to balance them all
             if (star.getGsArea()+triangle.getGsArea()+ellipse.getGsArea()<100.){
                 double area = (star.getGsArea()+triangle.getGsArea()+ellipse.getGsArea())/100.;
                 while (area/scale < 0.2 || area/scale > 1.0){
@@ -148,6 +159,7 @@ public class GameShape{
                 }
                 xScale = scale;
                 yScale = area/scale;
+            //if the other shapes are too big, shrink them and make a big square to balance them.
             } else {
                 double area = (star.getGsArea()+triangle.getGsArea()+ellipse.getGsArea())/100.;
                 xScale = 1.0;
@@ -164,7 +176,7 @@ public class GameShape{
         this.isSelected = false;
         this.yPosition = 500;
         this.xPosition = 525;
-        this.location = 0;
+        this.location = STARTING_ROW;
 
     }
 
