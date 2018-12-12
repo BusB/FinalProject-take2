@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -14,23 +13,10 @@ public class AreaTest{
         Ellipse2D ellipse = new Ellipse2D.Double(0,0,50,50);
         Rectangle2D rectangle = new Rectangle2D.Double(0,0,50,50);
         Polygon triangle = new Polygon(xListTriangle,yListTriangle,3);
-        double moveX = 0.0;
-        double moveY = 0.0;
-        double scaleX = 0.0;
-        double scaleY = 0.0;
-        AffineTransform moveShape1 = new AffineTransform();
-        moveShape1.setToTranslation(moveX,moveY);
-        AffineTransform scaleShape1 = new AffineTransform();
-        scaleShape1.setToScale(scaleX,scaleY);
         Area starArea = new Area(star);
         Area ellipseArea = new Area(ellipse);
         Area rectangleArea = new Area(rectangle);
         Area triangleArea = new Area(triangle);
-
-        starArea = starArea.createTransformedArea(scaleShape1);
-        starArea = starArea.createTransformedArea(moveShape1);
-
-        
 
     }
 }

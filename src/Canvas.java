@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 
 /**
@@ -177,6 +178,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2 = (Graphics2D) gc;
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gc2.setRenderingHints(rh);
+
         this.setVisible(true);
         new Thread(this).start();
     }
