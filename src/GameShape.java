@@ -10,23 +10,40 @@ public class GameShape{
     private double xScale;
     private double yScale;
     private String shapeName;
+    private int xPosition;
+    private int yPosition;
+    private boolean isSelected;
+    private int location;
+    private String filename;
+
 
     public GameShape(int shapeType, double xs, double ys){
         this.xScale = xs;
         this.yScale = ys;
+        isSelected = false;
+        yPosition = 500;
+        xPosition = 225;
+        location = 0;
 
         if(shapeType==1){
             this.gsArea = ELLIPSE_AREA * xs * ys;
             this.shapeName = "Ellipse";
+            this.filename="circle.png";
         } else if(shapeType==2){
             this.gsArea = TRIANGLE_AREA * xs * ys;
             this.shapeName = "Triangle";
+            this.xPosition+=100;
+            this.filename="triangle.png";
         } else if(shapeType==3){
             this.gsArea = STAR_AREA * xs * ys;
             this.shapeName = "Star";
+            this.xPosition+=200;
+            this.filename="star.png";
         } else {
             this.gsArea = RECTANGLE_AREA * xs * ys;
             this.shapeName = "Rectangle";
+            this.xPosition+=300;
+            this.filename="square.png";
         }
     }
 
@@ -34,18 +51,30 @@ public class GameShape{
         //creates random shape of the specified type
         this.xScale = 0.2 + 0.8*Math.random();
         this.yScale = 0.2 + 0.8*Math.random();
+        isSelected = false;
+        yPosition = 500;
+        xPosition = 225;
+        location = 0;
+
         if(shapeName.equalsIgnoreCase("ellipse")){
             this.gsArea = ELLIPSE_AREA * xScale * yScale;
             this.shapeName = "Ellipse";
+            this.filename="circle.png";
         } else if(shapeName.equalsIgnoreCase("triangle")){
             this.gsArea = TRIANGLE_AREA * xScale * yScale;
             this.shapeName = "Triangle";
+            this.xPosition+=100;
+            this.filename="triangle.png";
         } else if(shapeName.equalsIgnoreCase("star")){
             this.gsArea = STAR_AREA * xScale * yScale;
             this.shapeName = "Star";
+            this.filename="star.png";
+            this.xPosition+=200;
         } else {
             this.gsArea = RECTANGLE_AREA * xScale * yScale;
             this.shapeName = "Rectangle";
+            this.xPosition+=300;
+            this.filename="square.png";
         }
     }
 
@@ -131,6 +160,12 @@ public class GameShape{
 
         this.shapeName = "Rectangle";
         this.gsArea = RECTANGLE_AREA* xScale * yScale;
+        this.filename="square.png";
+        this.isSelected = false;
+        this.yPosition = 500;
+        this.xPosition = 525;
+        this.location = 0;
+
     }
 
     public double getGsArea(){
@@ -139,6 +174,22 @@ public class GameShape{
 
     public double getxScale() {
         return xScale;
+    }
+
+    public boolean getIsSelected(){
+        return isSelected;
+    }
+
+    public int getLocation() {
+        return location;
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
     }
 
     public double getyScale() {
@@ -154,6 +205,22 @@ public class GameShape{
 
     public void setyScale(double yScale){
         this.yScale = yScale;
+    }
+
+    public void setLocation(int location) {
+        this.location = location;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
+    }
+
+    public void selectShape(){
+        this.isSelected = !isSelected;
     }
 
     public void rescale(double area){
