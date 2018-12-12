@@ -5,17 +5,15 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 /**
- * Created by yijunma on 9/27/15.
+ * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander on 12/11/2018.
  */
 public class Canvas extends Window implements KeyListener, Runnable {
 
 
     // Create the variables you need below
     private String instructions;
-    private int count = 0;
-    private String ct;
-    private Box box = new Box(Color.PINK, 50, 325, 500);
-    private Box box2 = new Box(Color.PINK, 50, 425, 500);
+    private Box box = new Box(Color.PINK, "Box1", 50, 325, 500);
+    private Box box2 = new Box(Color.PINK, "Box2", 50, 425, 500);
     private Pan panLeft = new Pan(Color.ORANGE, 60, 300, 300, 30, 0, -180, 1);
     private Pan panRight = new Pan(Color.ORANGE, 440, 300, 300, 30, 0, -180, 1);
 
@@ -65,20 +63,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawBox(box2);
         drawPan(panLeft);
         drawPan(panRight);
-        if (panLeft.totalArea < panRight.totalArea) {
-            for (int i = 0; panLeft.y > 200; i--) {
-                panLeft.changeY(i);
-                panRight.changeY(i * -1);
-            }
-        } else if (panRight.totalArea < panLeft.totalArea) {
-            for (int i = 0; panRight.y > 200; i--) {
-                panRight.changeY(i);
-                panLeft.changeY(i * -1);
-            }
-        } else if (panRight.totalArea == panLeft.totalArea) {
-            panLeft.y = 300;
-            panRight.y = 300;
-        }
 
 
         if (keyTyped == 'a' && panRight.shapes.size() > 0) {
@@ -101,36 +85,37 @@ public class Canvas extends Window implements KeyListener, Runnable {
             box.setyPosition((int) panLeft.y - 35);
             box.setxPosition((int) panLeft.x + 5);
         } else if (keyTyped == 'd') {
-            panRight.shapes.add(box);
-            panRight.totalArea = box.getArea();
-            box.setyPosition((int) panRight.y - 35);
-            box.setxPosition((int) panRight.x + 5);
-        } else if (keyPressed == 'w') {
-            box.changeYPos(-5);
-        } else if (keyPressed == 's') {
-            box.changeYPos(5);
+            panRight.shapes.add(box2);
+            panRight.totalArea = box2.getArea();
+            box2.setyPosition((int) panRight.y - 35);
+            box2.setxPosition((int) panRight.x + 5);
+        } else if (keyTyped == 's') {
+            //method for removing a box?
+        } else if (keyPressed == 'W') {
+            //method for jumping into the pans to select/remove shapes?
+        }
+        if (panLeft.totalArea < panRight.totalArea && panLeft.y > 250) {
+            panLeft.changeY(-5);
+            panRight.changeY(5);
+            drawBox(box);
+            drawBox(box2);
+        } else if (panLeft.totalArea > panRight.totalArea && panRight.y > 250) {
+            panLeft.changeY(5);
+            panRight.changeY(-5);
+            drawBox(box);
+            drawBox(box2);
+        } else if (panRight.totalArea == panLeft.totalArea && panRight.y > 300) {
+            panLeft.changeY(5);
+            panRight.changeY(-5);
+            drawBox(box);
+            drawBox(box2);
+        } else if (panRight.totalArea == panLeft.totalArea && panLeft.y > 300) {
+            panLeft.changeY(-5);
+            panRight.changeY(5);
+            drawBox(box);
+            drawBox(box2);
         }
 
-
-//        if (box.getxPosition() <= 0) {
-//            box.setxPosition(canvasWidth);
-//            count++;
-//            ct = "Count: " + count;
-//        } else if (box.getxPosition() >= canvasWidth) {
-//            box.setxPosition(0);
-//            count++;
-//            ct = "Count: " + count;
-//        }
-
-//        if (box.getyPosition() <= 0) {
-//            box.setyPosition(canvasHeight);
-//            count++;
-//            ct = "Count: " + count;
-//        } else if (box.getyPosition() >= canvasHeight) {
-//            box.setyPosition(0);
-//            count++;
-//            ct = "Count: " + count;
-//        }
 
 
     }
@@ -155,7 +140,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     public void drawArc(GradientPaint platecolor, int x, int y, int w, int h, int start, int extent) {
         //gc2.setColor(color);
-        platecolor = new GradientPaint(210,y,Color.ORANGE,210,y+30,Color.darkGray);
+        platecolor = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
         gc2.setPaint(platecolor);
         gc2.fillArc(x, y, w, h, start, extent);
 
@@ -172,7 +157,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
     private BufferedImage buf;
     private Graphics gc;
     private Graphics2D gc2;
-    private int canvasXPosition = 0;
+    private int canvasXPosition = 200;
     private int canvasYPosition = 80;
 
     private Color backgroundColor = Color.BLACK;
@@ -221,11 +206,13 @@ public class Canvas extends Window implements KeyListener, Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(40);
+                Thread.sleep(20);
+
                 repaint();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
+
         }
     }
 }

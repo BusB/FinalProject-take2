@@ -5,9 +5,11 @@ public class Box extends Rectangle {
     private int width;
     private int xPosition;
     private int yPosition;
+    protected String name;
 
-    public Box(Color color, int width, int xPosition, int yPosition) {
+    public Box(Color color, String name, int width, int xPosition, int yPosition) {
         this.color = color;
+        this.name = name;
         this.width = width;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -17,7 +19,7 @@ public class Box extends Rectangle {
         return color;
     }
 
-    public double getArea(){
+    public double getArea() {
         return width * width;
     }
 
@@ -48,5 +50,9 @@ public class Box extends Rectangle {
 
     public void setyPosition(int yPosition) {
         this.yPosition = yPosition;
+    }
+
+    public String getName() {
+        return name;
     }
 }
