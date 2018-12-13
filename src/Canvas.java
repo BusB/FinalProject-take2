@@ -2,7 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.geom.Area;
 
 /**
  * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander on 12/11/2018.
@@ -17,10 +19,10 @@ public class Canvas extends Window implements KeyListener, Runnable {
     private Pan panLeft = new Pan(Color.ORANGE, 60, 300, 300, 30, 0, -180, 1);
     private Pan panRight = new Pan(Color.ORANGE, 440, 300, 300, 30, 0, -180, 1);
 
-    private GameShape gameEllipse = new GameShape("ellipse");
-    private GameShape gameTriangle = new GameShape("triangle");
-    private GameShape gameStar = new GameShape("star");
-    private GameShape gameRectangle = new GameShape(gameEllipse,gameTriangle,gameStar);
+    private GameShape gameEllipse = new GameShape(Color.RED,"ellipse");
+    private GameShape gameTriangle = new GameShape(Color.BLUE,"triangle");
+    private GameShape gameStar = new GameShape(Color.GREEN,"star");
+    private GameShape gameRectangle = new GameShape(Color.YELLOW, gameEllipse,gameTriangle,gameStar);
 
     // Don't delete this constructor!
     public Canvas() {
@@ -47,6 +49,12 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawArc(p.getGradient(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
     }
 
+    public void drawGameShape(GameShape gs){
+        drawGameShape(gs.getGsColor(), gs.getArea());
+    };
+
+
+
 
     //////////////////// add your draw method in the update method  ////////////////////
     //////////////////// so the canvas can keep updating the canvas ////////////////////
@@ -63,6 +71,10 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawBox(box2);
         drawPan(panLeft);
         drawPan(panRight);
+        drawGameShape(gameEllipse);
+        drawGameShape(gameTriangle);
+        drawGameShape(gameStar);
+        drawGameShape(gameRectangle);
 
 
         if (keyTyped == 'a' && panRight.shapes.size() > 0) {
@@ -153,6 +165,10 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.drawString(str, xPosition, yPosition);
     }
 
+    public void drawGameShape(Color color, Area a){
+        gc2.setColor(color);
+        gc2.fill(a);
+    };
     ///////////////////////// no need to understand what's happening below ///////////////////////////
     private BufferedImage buf;
     private Graphics gc;

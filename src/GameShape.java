@@ -1,6 +1,10 @@
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
-
-public class GameShape{
+public class GameShape extends Area {
     private static final double ELLIPSE_AREA = 0.78540;
     private static final double TRIANGLE_AREA = 0.5;
     private static final double RECTANGLE_AREA = 1.0;
@@ -9,6 +13,8 @@ public class GameShape{
     private static final int LEFT_PAN = 1;
     private static final int RIGHT_PAN = 2;
 
+    private Area shapeArea;
+    private Color gsColor;
     private double gsArea;
     private double xScale;
     private double yScale;
@@ -17,74 +23,68 @@ public class GameShape{
     private int yPosition;
     private boolean isSelected;
     private int location;
-    private String filename;
 
 
-    public GameShape(int shapeType, double xs, double ys){
-        this.xScale = xs;
-        this.yScale = ys;
-        isSelected = false;
-        yPosition = 500;
-        xPosition = 225;
-        location = STARTING_ROW;
-
-        if(shapeType==1){
-            this.gsArea = ELLIPSE_AREA * xs * ys;
-            this.shapeName = "Ellipse";
-            this.filename="circle.png";
-        } else if(shapeType==2){
-            this.gsArea = TRIANGLE_AREA * xs * ys;
-            this.shapeName = "Triangle";
-            this.xPosition+=100;
-            this.filename="triangle.png";
-        } else if(shapeType==3){
-            this.gsArea = STAR_AREA * xs * ys;
-            this.shapeName = "Star";
-            this.xPosition+=200;
-            this.filename="star.png";
-        } else {
-            this.gsArea = RECTANGLE_AREA * xs * ys;
-            this.shapeName = "Rectangle";
-            this.xPosition+=300;
-            this.filename="square.png";
-        }
-    }
-
-    public GameShape(String shapeName){
+    public GameShape(Color color, String shapeName){
         //creates random shape of the specified type
+        this.shapeArea = new Area();
+        this.gsColor = color;
         this.xScale = 0.2 + 0.8*Math.random();
         this.yScale = 0.2 + 0.8*Math.random();
         isSelected = false;
         yPosition = 500;
         xPosition = 225;
         location = STARTING_ROW;
+        Area a;
+        AffineTransform atScale = new AffineTransform();
+        AffineTransform atPosition = new AffineTransform();
 
         if(shapeName.equalsIgnoreCase("ellipse")){
             this.gsArea = ELLIPSE_AREA * xScale * yScale;
             this.shapeName = "Ellipse";
-            this.filename="circle.png";
+            Ellipse2D ellipse = new Ellipse2D.Double(0,0,50,50);
+            a = new Area(ellipse);
         } else if(shapeName.equalsIgnoreCase("triangle")){
             this.gsArea = TRIANGLE_AREA * xScale * yScale;
             this.shapeName = "Triangle";
             this.xPosition+=100;
-            this.filename="triangle.png";
+            int[] xListTriangle = {0,25,50};
+            int[] yListTriangle = {50,0,50};
+            Polygon triangle = new Polygon(xListTriangle,yListTriangle,3);
+            a = new Area(triangle);
         } else if(shapeName.equalsIgnoreCase("star")){
             this.gsArea = STAR_AREA * xScale * yScale;
             this.shapeName = "Star";
-            this.filename="star.png";
             this.xPosition+=200;
+            int[] xList = {0,18,25,32,50,35,40,25,10,15};
+            int[] yList = {19,19,0,19,19,32,50,40,50,32};
+            Polygon star = new Polygon(xList, yList, 10);
+            a = new Area(star);
+
+
         } else {
             this.gsArea = RECTANGLE_AREA * xScale * yScale;
             this.shapeName = "Rectangle";
             this.xPosition+=300;
-            this.filename="square.png";
+            Rectangle2D rectangle = new Rectangle2D.Double(0,0,50,50);
+            a = new Area(rectangle);
         }
+        yPosition += (50.*(1.-yScale));
+        this.shapeArea.add(a);
+        atScale.setToScale(xScale,yScale);
+        atPosition.setToTranslation(xPosition,yPosition);
+        this.shapeArea.transform(atScale);
+        this.shapeArea.transform(atPosition);
     }
 
     //creates a rectangle that makes sure shapes can balance
-    public GameShape(GameShape ellipse, GameShape triangle, GameShape star){
+    public GameShape(Color color, GameShape ellipse, GameShape triangle, GameShape star){
+        this.shapeArea = new Area();
+        this.gsColor = color;
         int randomShape = (int) (Math.random()*3);
         double scale = 0.2 + 0.8*Math.random();
+        AffineTransform atScale = new AffineTransform();
+        AffineTransform atPosition = new AffineTransform();
 
         //try to balance the ellipse
         if(randomShape==0){
@@ -172,16 +172,27 @@ public class GameShape{
 
         this.shapeName = "Rectangle";
         this.gsArea = RECTANGLE_AREA* xScale * yScale;
-        this.filename="square.png";
         this.isSelected = false;
         this.yPosition = 500;
         this.xPosition = 525;
         this.location = STARTING_ROW;
+        Rectangle2D rectangle = new Rectangle2D.Double(0,0,50,50);
+        Area a = new Area(rectangle);
+        this.shapeArea.add(a);
+        yPosition += (50.*(1.-yScale));
+        atScale.setToScale(xScale,yScale);
+        atPosition.setToTranslation(xPosition,yPosition);
+        this.shapeArea.transform(atScale);
+        this.shapeArea.transform(atPosition);
 
     }
 
     public double getGsArea(){
         return Math.round(this.gsArea*100);
+    }
+
+    public Area getArea(){
+        return shapeArea;
     }
 
     public double getxScale() {
@@ -211,6 +222,14 @@ public class GameShape{
         return shapeName;
     }
 
+    public Color getGsColor(){
+        return gsColor;
+    }
+
+    public void setGsColor(Color color){
+        this.gsColor = color;
+    }
+
     public void setxScale(double xScale) {
         this.xScale = xScale;
     }
@@ -238,6 +257,12 @@ public class GameShape{
     public void rescale(double area){
         this.xScale = xScale/Math.sqrt(area);
         this.yScale = yScale/Math.sqrt(area);
+        AffineTransform at1 = new AffineTransform();
+        at1.setToScale(1/Math.sqrt(area), 1/Math.sqrt(area));
+        this.shapeArea.transform(at1);
+        AffineTransform at2 = new AffineTransform();
+        at2.setToTranslation(0,50.*(1.-yScale));
+        this.shapeArea.transform(at2);
     }
 
     public String toString(){
