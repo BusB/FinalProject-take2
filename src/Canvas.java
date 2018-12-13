@@ -50,7 +50,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
     }
 
     public void drawGameShape(GameShape gs){
-        drawGameShape(gs.getGsColor(), gs.getArea());
+        drawGameShape(gs.getGsColor(), gs);
     };
 
 

@@ -13,7 +13,6 @@ public class GameShape extends Area {
     private static final int LEFT_PAN = 1;
     private static final int RIGHT_PAN = 2;
 
-    private Area shapeArea;
     private Color gsColor;
     private double gsArea;
     private double xScale;
@@ -27,7 +26,7 @@ public class GameShape extends Area {
 
     public GameShape(Color color, String shapeName){
         //creates random shape of the specified type
-        this.shapeArea = new Area();
+        super();
         this.gsColor = color;
         this.xScale = 0.2 + 0.8*Math.random();
         this.yScale = 0.2 + 0.8*Math.random();
@@ -70,16 +69,16 @@ public class GameShape extends Area {
             a = new Area(rectangle);
         }
         yPosition += (50.*(1.-yScale));
-        this.shapeArea.add(a);
+        this.add(a);
         atScale.setToScale(xScale,yScale);
         atPosition.setToTranslation(xPosition,yPosition);
-        this.shapeArea.transform(atScale);
-        this.shapeArea.transform(atPosition);
+        this.transform(atScale);
+        this.transform(atPosition);
     }
 
     //creates a rectangle that makes sure shapes can balance
     public GameShape(Color color, GameShape ellipse, GameShape triangle, GameShape star){
-        this.shapeArea = new Area();
+        super();
         this.gsColor = color;
         int randomShape = (int) (Math.random()*3);
         double scale = 0.2 + 0.8*Math.random();
@@ -178,21 +177,17 @@ public class GameShape extends Area {
         this.location = STARTING_ROW;
         Rectangle2D rectangle = new Rectangle2D.Double(0,0,50,50);
         Area a = new Area(rectangle);
-        this.shapeArea.add(a);
+        this.add(a);
         yPosition += (50.*(1.-yScale));
         atScale.setToScale(xScale,yScale);
         atPosition.setToTranslation(xPosition,yPosition);
-        this.shapeArea.transform(atScale);
-        this.shapeArea.transform(atPosition);
+        this.transform(atScale);
+        this.transform(atPosition);
 
     }
 
     public double getGsArea(){
         return Math.round(this.gsArea*100);
-    }
-
-    public Area getArea(){
-        return shapeArea;
     }
 
     public double getxScale() {
@@ -259,10 +254,10 @@ public class GameShape extends Area {
         this.yScale = yScale/Math.sqrt(area);
         AffineTransform at1 = new AffineTransform();
         at1.setToScale(1/Math.sqrt(area), 1/Math.sqrt(area));
-        this.shapeArea.transform(at1);
+        this.transform(at1);
         AffineTransform at2 = new AffineTransform();
         at2.setToTranslation(0,50.*(1.-yScale));
-        this.shapeArea.transform(at2);
+        this.transform(at2);
     }
 
     public String toString(){
