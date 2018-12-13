@@ -6,17 +6,21 @@ import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 
 /**
- * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander on 12/11/2018.
+ * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander and Matt Zellman on 12/11/2018.
  */
 public class Canvas extends Window implements KeyListener, Runnable {
 
 
     // Create the variables you need below
     private String instructions;
+    int[] xList = {0,18,25,31,49,34,39,24,10,15};
+    int[] yList = {19,19,0,19,19,31,49,39,49,31};
     private Box box = new Box(Color.PINK, "Box1", 50, 325, 500);
     private Box box2 = new Box(Color.PINK, "Box2", 50, 425, 500);
     private Pan panLeft = new Pan(Color.ORANGE, 60, 300, 300, 30, 0, -180, 1);
     private Pan panRight = new Pan(Color.ORANGE, 440, 300, 300, 30, 0, -180, 1);
+    private Polygon star = new Polygon(xList, yList, 10);
+
 
     private GameShape gameEllipse = new GameShape("ellipse");
     private GameShape gameTriangle = new GameShape("triangle");
@@ -35,7 +39,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         super(sFrame); //include this line in your own constructor
         initialize();  //include this line in your own constructor
         this.instructions = instructions;
-        //ct = "Count: ";
     }
 
 
@@ -46,6 +49,9 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     public void drawPan(Pan p) {
         drawArc(p.getGradient(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
+    }
+    public void drawStar(){
+        drawPolygon();
     }
 
 
@@ -64,6 +70,9 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawBox(box2);
         drawPan(panLeft);
         drawPan(panRight);
+        drawStar();
+
+
 
 
         if (keyTyped == 'a' && panRight.shapes.size() > 0) {
@@ -139,12 +148,18 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.fillRect(xPosition, yPosition, width, width);
     }
 
-    public void drawArc(GradientPaint platecolor, int x, int y, int w, int h, int start, int extent) {
+    public void drawArc(GradientPaint color, int x, int y, int w, int h, int start, int extent) {
         //gc2.setColor(color);
-        platecolor = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
-        gc2.setPaint(platecolor);
+        color = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
+        gc2.setPaint(color);
         gc2.fillArc(x, y, w, h, start, extent);
 
+    }
+
+    public void drawPolygon(){
+        Color color = Color.RED;
+        gc2.setPaint(color);
+        gc2.fillPolygon(xList, yList, 10);
     }
 
     public void drawString(Color color, String str, int fontSize, int xPosition, int yPosition) {
