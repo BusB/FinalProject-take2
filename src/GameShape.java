@@ -10,8 +10,8 @@ public class GameShape extends Area {
     private static final double RECTANGLE_AREA = 1.0;
     private static final double STAR_AREA = 0.32632;
     private static final int STARTING_ROW = 0;
-    private static final int LEFT_PAN = 1;
-    private static final int RIGHT_PAN = 2;
+    private static final int LEFT_PAN = -1;
+    private static final int RIGHT_PAN = 1;
 
     private Color gsColor;
     private double gsArea;
@@ -237,12 +237,31 @@ public class GameShape extends Area {
         this.location = location;
     }
 
-    public void setxPosition(int xPosition) {
-        this.xPosition = xPosition;
+    public void setPosition(double xPosition, double yPosition) {
+        double yMovement = yPosition-this.yPosition;
+        double xMovement = xPosition-this.xPosition;
+        AffineTransform at = new AffineTransform();
+        at.setToTranslation(xMovement,yMovement);
+        this.xPosition = (int) xPosition+1;
+        this.yPosition = (int) yPosition+1;
+        this.transform(at);
     }
 
-    public void setyPosition(int yPosition) {
-        this.yPosition = yPosition;
+    public void movePosition(double deltaX, double deltaY){
+        AffineTransform at = new AffineTransform();
+        at.setToTranslation(deltaX,deltaY);
+        this.xPosition+=deltaX;
+        this.yPosition+=deltaY;
+        this.transform(at);
+    }
+
+    public void hybridMove(double deltaX, double yPosition){
+        double deltaY = Math.round(yPosition)-this.yPosition;
+        AffineTransform at = new AffineTransform();
+        at.setToTranslation(deltaX,deltaY);
+        this.yPosition = (int) Math.round(yPosition);
+        this.xPosition+=deltaX;
+        this.transform(at);
     }
 
     public void selectShape(){
