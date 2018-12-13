@@ -226,10 +226,12 @@ public class GameShape extends Area {
     }
 
     public void setxScale(double xScale) {
+        this.gsArea=this.gsArea*xScale/this.xScale;
         this.xScale = xScale;
     }
 
     public void setyScale(double yScale){
+        this.gsArea=this.gsArea*yScale/this.yScale;
         this.yScale = yScale;
     }
 
@@ -277,6 +279,7 @@ public class GameShape extends Area {
         AffineTransform at2 = new AffineTransform();
         at2.setToTranslation(0,50.*(1.-yScale));
         this.transform(at2);
+        this.gsArea = this.gsArea/area;
     }
 
     public String toString(){
