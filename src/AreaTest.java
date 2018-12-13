@@ -30,7 +30,7 @@ public class AreaTest{
         starArea = starArea.createTransformedArea(scaleShape1);
         starArea = starArea.createTransformedArea(moveShape1);
 
-
+        
 
     }
 }

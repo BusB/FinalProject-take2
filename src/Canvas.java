@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.geom.Area;
 
 /**
- * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander on 12/11/2018.
+ * Created by yijunma on 9/27/15. Modified by John Erik "Buster" Bylander and Matt Zellman on 12/11/2018.
  */
 public class Canvas extends Window implements KeyListener, Runnable {
 
@@ -38,7 +38,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         super(sFrame); //include this line in your own constructor
         initialize();  //include this line in your own constructor
         this.instructions = instructions;
-        //ct = "Count: ";
     }
 
 
@@ -256,8 +255,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     }
 
-
-///////////////////// Functions / Variables you may need to use //////////////////////////
+    ///////////////////// Functions / Variables you may need to use //////////////////////////
 
     private int canvasWidth = 800;
     private int canvasHeight = 600;
@@ -275,10 +273,10 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.fillRect(xPosition, yPosition, width, width);
     }
 
-    public void drawArc(GradientPaint platecolor, int x, int y, int w, int h, int start, int extent) {
+    public void drawArc(GradientPaint color, int x, int y, int w, int h, int start, int extent) {
         //gc2.setColor(color);
-        platecolor = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
-        gc2.setPaint(platecolor);
+        color = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
+        gc2.setPaint(color);
         gc2.fillArc(x, y, w, h, start, extent);
 
     }
@@ -318,6 +316,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2 = (Graphics2D) gc;
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gc2.setRenderingHints(rh);
+
         this.setVisible(true);
         new Thread(this).start();
     }
