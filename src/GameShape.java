@@ -24,8 +24,8 @@ public class GameShape extends Area {
     private int location;
 
 
+    /**creates random shape of the specified type*/
     public GameShape(Color color, String shapeName){
-        //creates random shape of the specified type
         super();
         this.gsColor = color;
         this.xScale = 0.2 + 0.8*Math.random();
@@ -76,7 +76,8 @@ public class GameShape extends Area {
         this.transform(atPosition);
     }
 
-    //creates a rectangle that makes sure shapes can balance
+
+    /**creates a rectangle that makes sure shapes can balance*/
     public GameShape(Color color, GameShape ellipse, GameShape triangle, GameShape star){
         super();
         this.gsColor = color;
@@ -285,5 +286,29 @@ public class GameShape extends Area {
     public String toString(){
         return shapeName + "; x " + xScale + "; y " + yScale + "; Area " + this.getGsArea();
     }
+
+    public void resetEllipse(){
+        //this.gsColor = color;
+        this.xScale = 0.2 + 0.8*Math.random();
+        this.yScale = 0.2 + 0.8*Math.random();
+        isSelected = false;
+        yPosition = 500;
+        xPosition = 225;
+        location = STARTING_ROW;
+        Area a;
+        AffineTransform atScale = new AffineTransform();
+        AffineTransform atPosition = new AffineTransform();
+        this.gsArea = ELLIPSE_AREA * xScale * yScale;
+        this.shapeName = "Ellipse";
+        Ellipse2D ellipse = new Ellipse2D.Double(0,0,50,50);
+        a = new Area(ellipse);
+    }
+
+    public void resetTriangle(){
+
+    }
+
+
+
 }
 

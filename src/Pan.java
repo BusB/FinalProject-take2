@@ -6,7 +6,6 @@ public class Pan extends Arc2D.Double {
 
     private Color color;
     private GradientPaint gradient;
-    protected ArrayList<Shape> shapes = new ArrayList<>();
 
     double totalArea = 0;
 

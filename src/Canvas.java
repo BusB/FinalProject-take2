@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 
@@ -14,27 +13,30 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     // Create the variables you need below
     private String instructions;
+//    private String congrats = "Congratulations!!";
+    private String congrats = "Congratulations!!";
+    private String prompt = "To play again with new shapes, press r. Press q to quit.";
+    private String displayText;
+    private String displayText2 = "";
+
+    private Box box = new Box(Color.PINK, "Box1", 50, 325, 500);
     //int[] xList = {0,18,25,31,49,34,39,24,10,15};
     //int[] yList = {19,19,0,19,19,31,49,39,49,31};
-    int[] xList = {480,498,505,511,529,514,519,504,490,495};
-    int[] yList = {519,519,500,519,519,531,549,539,549,531};
-    private Box box = new Box(Color.PINK, "Box1", 50, 360, 500);
-    private Box box2 = new Box(Color.PINK, "Box2", 50, 425, 500);
-    private Pan panLeft = new Pan(Color.ORANGE, 60, 300, 300, 30, 0, -180, 1);
-    private Pan panRight = new Pan(Color.ORANGE, 440, 300, 300, 30, 0, -180, 1);
-    private Polygon star = new Polygon(xList, yList, 10);
+    //int[] xList = {480,498,505,511,529,514,519,504,490,495};
+    //int[] yList = {519,519,500,519,519,531,549,539,549,531};
+    //private Box box2 = new Box(Color.PINK, "Box2", 50, 425, 500);
+    private Pan panLeft = new Pan(Color.ORANGE, 10, 300, 360, 30, 0, -180, 1);
+    private Pan panRight = new Pan(Color.ORANGE, 430, 300, 360, 30, 0, -180, 1);
 
+    private GameShape gameEllipse = new GameShape(Color.RED,"ellipse");
+    private GameShape gameTriangle = new GameShape(Color.BLUE,"triangle");
+    private GameShape gameStar = new GameShape(Color.GREEN,"star");
+    private GameShape gameRectangle = new GameShape(Color.YELLOW, gameEllipse,gameTriangle,gameStar);
 
-    private GameShape gameEllipse = new GameShape("ellipse");
-    private GameShape gameTriangle = new GameShape("triangle");
-    private GameShape gameStar = new GameShape("star");
-    private GameShape gameRectangle = new GameShape(gameEllipse,gameTriangle,gameStar);
-
-    // Don't delete this constructor!
-    public Canvas() {
-        super(sFrame); //include this line in your own constructor
-        initialize();  //include this line in your own constructor
-    }
+//    public Canvas() {
+//        super(sFrame); //include this line in your own constructor
+//        initialize();  //include this line in your own constructor
+//    }
 
 
     // Create your constructor below that take a string as input
@@ -45,17 +47,20 @@ public class Canvas extends Window implements KeyListener, Runnable {
     }
 
 
-    // Create your drawBox method below
-    public void drawBox(Box b) {
-        drawSquare(b.getColor(), b.getxPosition(), b.getyPosition(), b.returnWidth());
-    }
+
+//    public void drawBox(Box b) {
+//        drawSquare(b.getColor(), b.getxPosition(), b.getyPosition(), b.returnWidth());
+//    }
 
     public void drawPan(Pan p) {
         drawArc(p.getGradient(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
     }
-    public void drawStar(){
-        drawPolygon();
+
+    public void drawGameShape(GameShape gs){
+        drawGameShape(gs.getGsColor(), gs);
     }
+
+
 
 
     //////////////////// add your draw method in the update method  ////////////////////
@@ -66,24 +71,42 @@ public class Canvas extends Window implements KeyListener, Runnable {
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(buf, 0, 0, null);//Don't delete this code!
 
+        if(gameEllipse.getLocation()*gameTriangle.getLocation()*gameRectangle.getLocation()*gameStar.getLocation() != 0&&panLeft.totalArea==panRight.totalArea){
+            displayText = congrats;
+            displayText2 = prompt;
+        } else {
+            displayText = instructions;
+            displayText2 = "";
+        }
+
         drawBackground();
-        drawString(Color.ORANGE, instructions, 30, 10, 50);
-        //drawString(Color.ORANGE, ct, 30, 10, 90);
-        drawBox(box);
-        drawBox(box2);
+        drawString(Color.ORANGE, displayText, 30, 10, 50);
+        drawString(Color.ORANGE, displayText2, 30, 10, 90);
+        //drawBox(box);
+        //drawBox(box2);
         drawPan(panLeft);
         drawPan(panRight);
-        drawStar();
+        drawGameShape(gameEllipse);
+        drawGameShape(gameTriangle);
+        drawGameShape(gameStar);
+        drawGameShape(gameRectangle);
 
-        if(keyTyped == 'b'){
-            AffineTransform at = new AffineTransform();
+//        if(keyTyped == 'b'){
+//            AffineTransform at = new AffineTransform();
+//
+//        }
+
+        if(keyPressed == 'r') {
+            gameEllipse = new GameShape(Color.RED,"ellipse");
+            gameTriangle = new GameShape(Color.BLUE,"triangle");
+            gameStar = new GameShape(Color.GREEN,"star");
+            gameRectangle = new GameShape(Color.YELLOW, gameEllipse,gameTriangle,gameStar);
+            panLeft.totalArea = 0;
+            panRight.totalArea = 0;
 
         }
 
-
-
-
-        if (keyTyped == 'a' && panRight.shapes.size() > 0) {
+        /*if (keyTyped == 'a' && panRight.shapes.size() > 0) {
             panLeft.shapes.add(box);
             panLeft.totalArea = box.getArea();
             box.setyPosition((int) panLeft.y - 35);
@@ -132,9 +155,125 @@ public class Canvas extends Window implements KeyListener, Runnable {
             panRight.changeY(5);
             drawBox(box);
             drawBox(box2);
+        }*/
+
+
+
+        //Moving the GameShapes and adding weight to the pans.
+        if(keyTyped=='1'){
+            if(gameEllipse.getLocation()==1){
+                gameEllipse.setLocation(-1);
+                panLeft.totalArea+=gameEllipse.getGsArea();
+                panRight.totalArea-=gameEllipse.getGsArea();
+                gameEllipse.hybridMove(-425, panLeft.y-35+(50*(1-gameEllipse.getyScale())));
+            } else if(gameEllipse.getLocation()==-1){
+                gameEllipse.setLocation(1);
+                panRight.totalArea+=gameEllipse.getGsArea();
+                panLeft.totalArea-=gameEllipse.getGsArea();
+                gameEllipse.hybridMove(425, panRight.y-35+(50*(1-gameEllipse.getyScale())));
+            } else {
+                gameEllipse.setLocation(-1);
+                panLeft.totalArea+=gameEllipse.getGsArea();
+                gameEllipse.hybridMove(-210, panLeft.y-35+(50*(1-gameEllipse.getyScale())));
+            }
+            keyTyped = '0';
+        } else if(keyTyped=='2'){
+            if(gameTriangle.getLocation()==1){
+                gameTriangle.setLocation(-1);
+                panLeft.totalArea+=gameTriangle.getGsArea();
+                panRight.totalArea-=gameTriangle.getGsArea();
+                gameTriangle.hybridMove(-425, panLeft.y-35+(50*(1-gameTriangle.getyScale())));
+            } else if(gameTriangle.getLocation()==-1){
+                gameTriangle.setLocation(1);
+                panRight.totalArea+=gameTriangle.getGsArea();
+                panLeft.totalArea-=gameTriangle.getGsArea();
+                gameTriangle.hybridMove(425, panRight.y-35+(50*(1-gameTriangle.getyScale())));
+            } else {
+                gameTriangle.setLocation(-1);
+                panLeft.totalArea+=gameTriangle.getGsArea();
+                gameTriangle.hybridMove(-210, panLeft.y-35+(50*(1-gameTriangle.getyScale())));
+            }
+            keyTyped = '0';
+        } else if(keyTyped=='3'){
+            if(gameStar.getLocation()==1){
+                gameStar.setLocation(-1);
+                panLeft.totalArea+=gameStar.getGsArea();
+                panRight.totalArea-=gameStar.getGsArea();
+                gameStar.hybridMove(-425, panLeft.y-35+(50*(1-gameStar.getyScale())));
+            } else if(gameStar.getLocation()==-1){
+                gameStar.setLocation(1);
+                panRight.totalArea+=gameStar.getGsArea();
+                panLeft.totalArea-=gameStar.getGsArea();
+                gameStar.hybridMove(425, panRight.y-35+(50*(1-gameStar.getyScale())));
+            } else {
+                gameStar.setLocation(-1);
+                panLeft.totalArea+=gameStar.getGsArea();
+                gameStar.hybridMove(-210, panLeft.y-35+(50*(1-gameStar.getyScale())));
+            }
+            keyTyped='0';
+        } else if(keyTyped=='4'){
+            if(gameRectangle.getLocation()==1){
+                gameRectangle.setLocation(-1);
+                panLeft.totalArea+=gameRectangle.getGsArea();
+                panRight.totalArea-=gameRectangle.getGsArea();
+                gameRectangle.hybridMove(-425, panLeft.y-35+(50*(1-gameRectangle.getyScale())));
+            } else if(gameRectangle.getLocation()==-1){
+                gameRectangle.setLocation(1);
+                panRight.totalArea+=gameRectangle.getGsArea();
+                panLeft.totalArea-=gameRectangle.getGsArea();
+                gameRectangle.hybridMove(425, panRight.y-35+(50*(1-gameRectangle.getyScale())));
+            } else {
+                gameRectangle.setLocation(-1);
+                panLeft.totalArea+=gameRectangle.getGsArea();
+                gameRectangle.hybridMove(-210, panLeft.y-35+(50*(1-gameRectangle.getyScale())));
+            }
+            keyTyped = '0';
         }
-
-
+        if (panLeft.totalArea < panRight.totalArea && panLeft.y > 250) {
+            panLeft.changeY(-5);
+            panRight.changeY(5);
+            gameEllipse.movePosition(0,gameEllipse.getLocation()*5);
+            gameTriangle.movePosition(0,gameTriangle.getLocation()*5);
+            gameStar.movePosition(0,gameStar.getLocation()*5);
+            gameRectangle.movePosition(0,gameRectangle.getLocation()*5);
+            drawGameShape(gameEllipse);
+            drawGameShape(gameTriangle);
+            drawGameShape(gameStar);
+            drawGameShape(gameRectangle);
+        } else if (panLeft.totalArea > panRight.totalArea && panRight.y > 250) {
+            panLeft.changeY(5);
+            panRight.changeY(-5);
+            gameEllipse.movePosition(0,gameEllipse.getLocation()*-5);
+            gameTriangle.movePosition(0,gameTriangle.getLocation()*-5);
+            gameStar.movePosition(0,gameStar.getLocation()*-5);
+            gameRectangle.movePosition(0,gameRectangle.getLocation()*-5);
+            drawGameShape(gameEllipse);
+            drawGameShape(gameTriangle);
+            drawGameShape(gameStar);
+            drawGameShape(gameRectangle);
+        } else if (panRight.totalArea == panLeft.totalArea && panRight.y > 300) {
+            panLeft.changeY(5);
+            panRight.changeY(-5);
+            gameEllipse.movePosition(0,gameEllipse.getLocation()*-5);
+            gameTriangle.movePosition(0,gameTriangle.getLocation()*-5);
+            gameStar.movePosition(0,gameStar.getLocation()*-5);
+            gameRectangle.movePosition(0,gameRectangle.getLocation()*-5);
+            drawGameShape(gameEllipse);
+            drawGameShape(gameTriangle);
+            drawGameShape(gameStar);
+            drawGameShape(gameRectangle);
+        } else if (panRight.totalArea == panLeft.totalArea && panLeft.y > 300) {
+            panLeft.changeY(-5);
+            panRight.changeY(5);
+            gameEllipse.movePosition(0,gameEllipse.getLocation()*5);
+            gameTriangle.movePosition(0,gameTriangle.getLocation()*5);
+            gameStar.movePosition(0,gameStar.getLocation()*5);
+            gameRectangle.movePosition(0,gameRectangle.getLocation()*5);
+            drawGameShape(gameEllipse);
+            drawGameShape(gameTriangle);
+            drawGameShape(gameStar);
+            drawGameShape(gameRectangle);
+        }
 
     }
 
@@ -150,24 +289,17 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
-    public void drawSquare(Color color, int xPosition, int yPosition, int width) {
-        // Use gc.fillRect(...); //The arguments are xPosition, yPosition, width, length
-        gc2.setColor(color);
-        gc2.fillRect(xPosition, yPosition, width, width);
-    }
+//    public void drawSquare(Color color, int xPosition, int yPosition, int width) {
+//        // Use gc.fillRect(...); //The arguments are xPosition, yPosition, width, length
+//        gc2.setColor(color);
+//        gc2.fillRect(xPosition, yPosition, width, width);
+//    }
 
     public void drawArc(GradientPaint color, int x, int y, int w, int h, int start, int extent) {
-        //gc2.setColor(color);
         color = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
         gc2.setPaint(color);
         gc2.fillArc(x, y, w, h, start, extent);
 
-    }
-
-    public void drawPolygon(){
-        Color color = Color.RED;
-        gc2.setPaint(color);
-        gc2.fillPolygon(xList, yList, 10);
     }
 
     public void drawString(Color color, String str, int fontSize, int xPosition, int yPosition) {
@@ -177,9 +309,13 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.drawString(str, xPosition, yPosition);
     }
 
-    ///////////////////////// no need to understand what's happening below ///////////////////////////
+    public void drawGameShape(Color color, Area a){
+        gc2.setColor(color);
+        gc2.fill(a);
+    };
+
+    //Defining the canvas and key listeners
     private BufferedImage buf;
-    private Graphics gc;
     private Graphics2D gc2;
     private int canvasXPosition = 200;
     private int canvasYPosition = 80;
@@ -197,7 +333,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
         sFrame.addKeyListener(this);
         this.setBounds(canvasXPosition, canvasYPosition, canvasWidth, canvasHeight);
         this.buf = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB);
-        gc = buf.getGraphics();
+        Graphics gc = buf.getGraphics();
         gc2 = (Graphics2D) gc;
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gc2.setRenderingHints(rh);
@@ -213,8 +349,8 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //If you press "ESC", you quit the game
-        if (e.getKeyCode() == 27) {
+        //If you press "ESC" or "q", you quit the game
+        if (e.getKeyCode() == 27 || e.getKeyCode() == 81) {
             this.dispose();
             System.exit(0);
         }
