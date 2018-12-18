@@ -10,8 +10,6 @@ public class GameShape extends Area {
     private static final double RECTANGLE_AREA = 1.0;
     private static final double STAR_AREA = 0.32632;
     private static final int STARTING_ROW = 0;
-    private static final int LEFT_PAN = -1;
-    private static final int RIGHT_PAN = 1;
 
     private Color gsColor;
     private double gsArea;
@@ -286,28 +284,6 @@ public class GameShape extends Area {
     public String toString(){
         return shapeName + "; x " + xScale + "; y " + yScale + "; Area " + this.getGsArea();
     }
-
-    public void resetEllipse(){
-        //this.gsColor = color;
-        this.xScale = 0.2 + 0.8*Math.random();
-        this.yScale = 0.2 + 0.8*Math.random();
-        isSelected = false;
-        yPosition = 500;
-        xPosition = 225;
-        location = STARTING_ROW;
-        Area a;
-        AffineTransform atScale = new AffineTransform();
-        AffineTransform atPosition = new AffineTransform();
-        this.gsArea = ELLIPSE_AREA * xScale * yScale;
-        this.shapeName = "Ellipse";
-        Ellipse2D ellipse = new Ellipse2D.Double(0,0,50,50);
-        a = new Area(ellipse);
-    }
-
-    public void resetTriangle(){
-
-    }
-
 
 
 }

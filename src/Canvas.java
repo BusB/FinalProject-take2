@@ -13,18 +13,12 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
     // Create the variables you need below
     private String instructions;
-//    private String congrats = "Congratulations!!";
     private String congrats = "Congratulations!!";
     private String prompt = "To play again with new shapes, press r. Press q to quit.";
     private String displayText;
     private String displayText2 = "";
 
     private Box box = new Box(Color.PINK, "Box1", 50, 325, 500);
-    //int[] xList = {0,18,25,31,49,34,39,24,10,15};
-    //int[] yList = {19,19,0,19,19,31,49,39,49,31};
-    //int[] xList = {480,498,505,511,529,514,519,504,490,495};
-    //int[] yList = {519,519,500,519,519,531,549,539,549,531};
-    //private Box box2 = new Box(Color.PINK, "Box2", 50, 425, 500);
     private Pan panLeft = new Pan(Color.ORANGE, 10, 300, 360, 30, 0, -180, 1);
     private Pan panRight = new Pan(Color.ORANGE, 430, 300, 360, 30, 0, -180, 1);
 
@@ -48,9 +42,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
 
 
-//    public void drawBox(Box b) {
-//        drawSquare(b.getColor(), b.getxPosition(), b.getyPosition(), b.returnWidth());
-//    }
 
     public void drawPan(Pan p) {
         drawArc(p.getGradient(), (int) p.x, (int) p.y, (int) p.width, (int) p.height, (int) p.start, (int) p.extent);
@@ -82,8 +73,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawBackground();
         drawString(Color.ORANGE, displayText, 30, 10, 50);
         drawString(Color.ORANGE, displayText2, 30, 10, 90);
-        //drawBox(box);
-        //drawBox(box2);
         drawPan(panLeft);
         drawPan(panRight);
         drawGameShape(gameEllipse);
@@ -91,10 +80,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         drawGameShape(gameStar);
         drawGameShape(gameRectangle);
 
-//        if(keyTyped == 'b'){
-//            AffineTransform at = new AffineTransform();
-//
-//        }
 
         if(keyTyped == 'r') {
             gameEllipse = new GameShape(Color.RED,"ellipse");
@@ -107,56 +92,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
 
         }
 
-        /*if (keyTyped == 'a' && panRight.shapes.size() > 0) {
-            panLeft.shapes.add(box);
-            panLeft.totalArea = box.getArea();
-            box.setyPosition((int) panLeft.y - 35);
-            box.setxPosition((int) panLeft.x + 5);
-            box2.setyPosition((int) panRight.y - 35);
-            box2.setxPosition((int) panRight.x + 5);
-        } else if (keyTyped == 'a') {
-            panLeft.shapes.add(box);
-            panLeft.totalArea = box.getArea();
-            box.setyPosition((int) panLeft.y - 35);
-            box.setxPosition((int) panLeft.x + 5);
-        } else if (keyTyped == 'd' && panLeft.shapes.size() > 0) {
-            panRight.shapes.add(box2);
-            panRight.totalArea = box2.getArea();
-            box2.setyPosition((int) panRight.y - 35);
-            box2.setxPosition((int) panRight.x + 5);
-            box.setyPosition((int) panLeft.y - 35);
-            box.setxPosition((int) panLeft.x + 5);
-        } else if (keyTyped == 'd') {
-            panRight.shapes.add(box2);
-            panRight.totalArea = box2.getArea();
-            box2.setyPosition((int) panRight.y - 35);
-            box2.setxPosition((int) panRight.x + 5);
-        } else if (keyTyped == 's') {
-            //method for removing a box?
-        } else if (keyPressed == 'W') {
-            //method for jumping into the pans to select/remove shapes?
-        }
-        if (panLeft.totalArea < panRight.totalArea && panLeft.y > 250) {
-            panLeft.changeY(-5);
-            panRight.changeY(5);
-            drawBox(box);
-            drawBox(box2);
-        } else if (panLeft.totalArea > panRight.totalArea && panRight.y > 250) {
-            panLeft.changeY(5);
-            panRight.changeY(-5);
-            drawBox(box);
-            drawBox(box2);
-        } else if (panRight.totalArea == panLeft.totalArea && panRight.y > 300) {
-            panLeft.changeY(5);
-            panRight.changeY(-5);
-            drawBox(box);
-            drawBox(box2);
-        } else if (panRight.totalArea == panLeft.totalArea && panLeft.y > 300) {
-            panLeft.changeY(-5);
-            panRight.changeY(5);
-            drawBox(box);
-            drawBox(box2);
-        }*/
 
 
 
@@ -290,11 +225,6 @@ public class Canvas extends Window implements KeyListener, Runnable {
         gc2.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
-//    public void drawSquare(Color color, int xPosition, int yPosition, int width) {
-//        // Use gc.fillRect(...); //The arguments are xPosition, yPosition, width, length
-//        gc2.setColor(color);
-//        gc2.fillRect(xPosition, yPosition, width, width);
-//    }
 
     public void drawArc(GradientPaint color, int x, int y, int w, int h, int start, int extent) {
         color = new GradientPaint(210, y, Color.ORANGE, 210, y + 30, Color.darkGray);
