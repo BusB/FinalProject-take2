@@ -96,13 +96,14 @@ public class Canvas extends Window implements KeyListener, Runnable {
 //
 //        }
 
-        if(keyPressed == 'r') {
+        if(keyTyped == 'r') {
             gameEllipse = new GameShape(Color.RED,"ellipse");
             gameTriangle = new GameShape(Color.BLUE,"triangle");
             gameStar = new GameShape(Color.GREEN,"star");
             gameRectangle = new GameShape(Color.YELLOW, gameEllipse,gameTriangle,gameStar);
             panLeft.totalArea = 0;
             panRight.totalArea = 0;
+            keyTyped = 'j';
 
         }
 
